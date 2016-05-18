@@ -1,4 +1,4 @@
-# track-js
+# meme-maker
 
 In-browser meme creator powered by lodash templates
 
