@@ -2,10 +2,11 @@
   "name": "meme-maker",
   "version": "0.1.0",
   "description": "In-browser meme creator powered by lodash templates",
-  "main": "lib/index.js",
+  "main": "lib/meme.js",
   "scripts": {
     "preversion": "npm test",
     "version": "npm run clean && npm run build && git add -A lib dist",
+    "postversion": "git push && git push --tags",
     "clean": "n-clean dist && n-clean lib",
     "build": "npm run build:npm && npm run build:browser",
     "build:npm": "babel -d lib src",
