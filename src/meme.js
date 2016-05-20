@@ -94,11 +94,6 @@ function render(container, template, data, overwriteConfig) {
 
     container.contentWindow.document.body.innerHTML = html;
 
-    var script   = document.createElement("script");
-    script.type  = "text/javascript";
-    // script.text  = "alert('gert');";
-    container.contentWindow.document.body.appendChild(script);
-
     if (data.width)
         container.setAttribute('width', data.width);
 
