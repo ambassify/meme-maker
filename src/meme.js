@@ -92,6 +92,17 @@ function waitForFrame(container, onFrame) {
     return true;
 }
 
+function createScript(node){
+    const script  = document.createElement("script");
+
+    script.text = node.innerHTML;
+    for (let i = node.attributes.length - 1; i >= 0; i--) {
+        script.setAttribute(node.attributes[i].name, node.attributes[i].value);
+    }
+
+    return script;
+}
+
 function render(container, template, data, overwriteConfig) {
     let html = template ? template(data) : '';
 
@@ -100,7 +111,12 @@ function render(container, template, data, overwriteConfig) {
         html = setInHtml(html, MEME_CONFIGURATION, json);
     }
 
-    container.contentWindow.document.body.innerHTML = html;
+    const body = container.contentWindow.document.body;
+
+    body.innerHTML = html;
+
+    const scripts = body.querySelectorAll('script[type="text/javascript"]');
+    [].forEach.call(scripts, script => script.parentNode.replaceChild(createScript(script), script));
 
     if (data.width)
         container.setAttribute('width', data.width);
