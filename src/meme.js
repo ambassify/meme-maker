@@ -84,6 +84,14 @@ function createFrame() {
     return frame;
 }
 
+function waitForFrame(container, onFrame) {
+    if (container.contentWindow.document.body)
+        return false;
+
+    container.addEventListener('load', onFrame);
+    return true;
+}
+
 function render(container, template, data, overwriteConfig) {
     let html = template ? template(data) : '';
 
@@ -188,6 +196,9 @@ class Meme extends Emitter {
     }
 
     configure(config, ready) {
+        if (waitForFrame(this.container, () => this.configure(config, ready)))
+            return;
+
         const setHtml = config.html && config.html !== this._html;
         const getHtml = !config.html && config.url && config.url !== this.config.url;
         this.config = config;
@@ -221,6 +232,9 @@ class Meme extends Emitter {
     }
 
     render(variables, ready) {
+        if (waitForFrame(this.container, () => this.render(variables, ready)))
+            return;
+
         const readyData = {
             variables,
             preview: render(this.container, this._template, this.getVariables(variables))
