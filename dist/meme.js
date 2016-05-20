@@ -189,6 +189,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return true;
 	}
 
+	function createScript(node) {
+	    var script = document.createElement("script");
+
+	    script.text = node.innerHTML;
+	    for (var i = node.attributes.length - 1; i >= 0; i--) {
+	        script.setAttribute(node.attributes[i].name, node.attributes[i].value);
+	    }
+
+	    return script;
+	}
+
 	function _render(container, template, data, overwriteConfig) {
 	    var html = template ? template(data) : '';
 
@@ -197,7 +208,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        html = setInHtml(html, MEME_CONFIGURATION, json);
 	    }
 
-	    container.contentWindow.document.body.innerHTML = html;
+	    var body = container.contentWindow.document.body;
+
+	    body.innerHTML = html;
+
+	    var scripts = body.querySelectorAll('script[type="text/javascript"]');
+	    [].forEach.call(scripts, function (script) {
+	        return script.parentNode.replaceChild(createScript(script), script);
+	    });
 
 	    if (data.width) container.setAttribute('width', data.width);
 
