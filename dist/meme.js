@@ -182,6 +182,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return frame;
 	}
 
+	function waitForFrame(container, onFrame) {
+	    if (container.contentWindow.document.body) return false;
+
+	    container.addEventListener('load', onFrame);
+	    return true;
+	}
+
 	function _render(container, template, data, overwriteConfig) {
 	    var html = template ? template(data) : '';
 
@@ -191,11 +198,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    container.contentWindow.document.body.innerHTML = html;
-
-	    var script = document.createElement("script");
-	    script.type = "text/javascript";
-	    // script.text  = "alert('gert');";
-	    container.contentWindow.document.body.appendChild(script);
 
 	    if (data.width) container.setAttribute('width', data.width);
 
@@ -291,6 +293,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Meme.prototype.configure = function configure(config, ready) {
 	        var _this3 = this;
 
+	        if (waitForFrame(this.container, function () {
+	            return _this3.configure(config, ready);
+	        })) return;
+
 	        var setHtml = config.html && config.html !== this._html;
 	        var getHtml = !config.html && config.url && config.url !== this.config.url;
 	        this.config = config;
@@ -328,6 +334,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Meme.prototype.render = function render(variables, ready) {
 	        var _this4 = this;
+
+	        if (waitForFrame(this.container, function () {
+	            return _this4.render(variables, ready);
+	        })) return;
 
 	        var readyData = {
 	            variables: variables,
