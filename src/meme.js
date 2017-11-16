@@ -81,11 +81,14 @@ function createFrame() {
     frame.setAttribute('class', 'amb-meme-container');
     frame.style.border = 'none';
     frame.style['vertical-align'] = 'bottom';
+    frame.addEventListener('load', () => {
+        frame.setAttribute('data-loaded', 'true');
+    });
     return frame;
 }
 
 function waitForFrame(container, onFrame) {
-    if (container.contentWindow.document.body)
+    if (container.getAttribute('data-loaded') == 'true')
         return false;
 
     container.addEventListener('load', onFrame);
